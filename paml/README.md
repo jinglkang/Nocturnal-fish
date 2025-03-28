@@ -488,4 +488,6 @@ vi spe.tre
 # (base) jlkang@hnu2024 Thu Mar 20 08:32:42 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
 nohup perl codeml_freeRatio_parallel.pl final_orth_input_paml.txt >free_ratio.process 2>&1 &
 # [1] 1486788
+# (base) jlkang@hnu2024 Fri Mar 28 22:48:54 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
+perl extract_free_ratio.pl final_orth_input_paml.txt
 ```
