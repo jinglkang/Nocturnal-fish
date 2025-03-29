@@ -333,4 +333,31 @@ nohup raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 100 -s final_alignment
 # kangjingliang@KangdeMacBook-Pro 四  3 27 13:35:34 ~/Documents/2025/Nocturnal_fish/Opsins
 mkdir OPSR; cd OPSR
 scp kang1234@10.64.139.91:~/nocturnal_fish/Opsins/OPSR/RAxML* ./
+
+# select the orthologous genes of corresponsding species for each opsin to construct a phylogenetic tree
+# concatenate the orthologous protein sequences of corresponsding species
+# (base) jlkang@hnu2024 Sat Mar 29 08:02:08 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
+perl conca_spePEP.pl OPSB_target_id.txt > OPSB_target_spe.fasta
+fasta2phy.pl OPSB_target_spe.fasta # output OPSB_target_spe.phy
+perl conca_spePEP.pl OPSB_target_id.txt > OPSB_target_spe.fasta
+fasta2phy.pl OPSB_target_spe.fasta # output OPSB_target_spe.phy
+
+perl conca_spePEP.pl OPSD_target_id.txt > OPSD_target_spe.fasta
+fasta2phy.pl OPSD_target_spe.fasta # output OPSD_target_spe.phy
+
+perl conca_spePEP.pl OPSG_target_id.txt > OPSG_target_spe.fasta
+fasta2phy.pl OPSG_target_spe.fasta # output OPSG_target_spe.phy
+
+perl conca_spePEP.pl OPSR_target_id.txt > OPSR_target_spe.fasta
+fasta2phy.pl OPSR_target_spe.fasta # output OPSR_target_spe.phy
+
+# construct the phylogenetci tree
+# opsin_phy.sh
+raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 100 -s OPSB_target_spe.phy -n OPSB -T 192
+raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 100 -s OPSD_target_spe.phy -n OPSD -T 192
+raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 100 -s OPSG_target_spe.phy -n OPSG -T 192
+raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 100 -s OPSR_target_spe.phy -n OPSR -T 192
+# (base) jlkang@hnu2024 Sat Mar 29 08:10:37 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
+nohup sh opsin_phy.sh > tree.reports 2>&1 &
+# [1] 38653
 ```
