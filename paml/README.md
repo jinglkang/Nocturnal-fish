@@ -538,3 +538,11 @@ scp jlkang@10.33.247.14:/data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder
 # R plot
 # ~/Documents/2025/Nocturnal_fish/free-ratio-plot.R
 ```
+## Convergence detection
+```bash
+# (base) jlkang@hnu2024 Tue Apr 08 20:24:21 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input/OG0013142
+less final_alignment_pep.fa|grep '>'|perl -alne 's/\>//g;$info.=$_." ";END{print $info}'
+# Abrevicaudatus Acrassiceps Amelas Cartus Cmacrodon Cquinquelineatus Fthermalis Fvariegata Nfusca Nsavayensis Nviria Oangustatus Ocompressus Ocookii Ocyanosoma Odoederleini Onigrofasciatus Onotatus Onovemfasciatus Pexostigma Pfraenatus Pmirifica Rgracilis Snematoptera Tfucata Tzosterophora Zleptacanthus Zviridiventer Acura Apoly Daru Pmol Padel Platyfish Fugu Medaka Stickleback Zebrafish
+# (base) jlkang@hnu2024 Tue Apr 08 20:44:16 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
+perl Detect_Nons_all.pl >convergent_evo_genes.txt
+```
