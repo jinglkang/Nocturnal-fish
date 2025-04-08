@@ -544,9 +544,47 @@ scp jlkang@10.33.247.14:/data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder
 less final_alignment_pep.fa|grep '>'|perl -alne 's/\>//g;$info.=$_." ";END{print $info}'
 # Abrevicaudatus Acrassiceps Amelas Cartus Cmacrodon Cquinquelineatus Fthermalis Fvariegata Nfusca Nsavayensis Nviria Oangustatus Ocompressus Ocookii Ocyanosoma Odoederleini Onigrofasciatus Onotatus Onovemfasciatus Pexostigma Pfraenatus Pmirifica Rgracilis Snematoptera Tfucata Tzosterophora Zleptacanthus Zviridiventer Acura Apoly Daru Pmol Padel Platyfish Fugu Medaka Stickleback Zebrafish
 # (base) jlkang@hnu2024 Tue Apr 08 20:44:16 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
-perl Detect_Nons_all.pl >convergent_evo_genes.txt
+perl Detect_Nons_all.pl > convergent_evo_genes.txt
+# kangjingliang@KangdeMacBook-Pro-2 二  4 08 21:08:55 ~/Documents/2025/Nocturnal_fish
+scp all_swissprot_diamond_ano_final.txt jlkang@10.33.247.14:/data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
 
 # Orthogroups annotation
 # (base) jlkang@hnu2024 Tue Apr 08 21:27:23 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups
 perl anno_orth.pl > convergent_evo_genes_ano.txt
+```
+
+```anno_orth.pl
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $ann="all_swissprot_diamond_ano_final.txt";
+my (%anno, %id);
+open ANN, $ann or die "can not open $ann\n";
+while (<ANN>) {
+        chomp;
+        my @a=split /\t/;
+        if (/^Zebrafish/i) {
+                $anno{$a[0]}=$a[1]."\t".$a[-1];
+        }
+}
+
+my $list="orthologous_list_rep.txt";
+open LIST, $list or die "can not open $list\n";
+while (<LIST>) {
+        chomp;
+        next if /^Orth/i;
+        my @a=split /\t/;
+        $id{$a[0]}=$a[-1];
+}
+
+my $cove="paml_input/convergent_evo_genes.txt";
+open COVE, $cove or die "can not open $cove\n";
+while (<COVE>) {
+        chomp;
+        my @a=split /\t/;
+        my $zeb=$id{$a[0]};
+        my $an =$anno{$zeb};
+        print "$a[0]\t$an\t$a[1]\t$a[2]\n";
+}
 ```
