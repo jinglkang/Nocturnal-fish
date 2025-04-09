@@ -538,7 +538,7 @@ scp jlkang@10.33.247.14:/data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder
 # R plot
 # ~/Documents/2025/Nocturnal_fish/free-ratio-plot.R
 ```
-## Convergence detection
+## Detect the convergence evolution in nocturnal fishes
 ```bash
 # (base) jlkang@hnu2024 Tue Apr 08 20:24:21 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input/OG0013142
 less final_alignment_pep.fa|grep '>'|perl -alne 's/\>//g;$info.=$_." ";END{print $info}'
@@ -587,4 +587,49 @@ while (<COVE>) {
         my $an =$anno{$zeb};
         print "$a[0]\t$an\t$a[1]\t$a[2]\n";
 }
+```
+
+## Detect the positive selected genes in the ancestoral node of all nocturnal fish species
+```bash
+# (base) jlkang@hnu2024 Wed Apr 09 13:41:09 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
+vi spe_nocAces.tre
+# (Zebrafish,(Stickleback,((Fugu,((Medaka,Platyfish),(Daru,((Acura,Apoly),(Pmol,Padel))))),(Tzosterophora,(Tfucata,(Rgracilis,(((Snematoptera,(Pfraenatus,Pexostigma)),((Fvariegata,Acrassiceps),((Amelas,Abrevicaudatus),((Nsavayensis,Nviria),(Pmirifica,Nfusca))))),((Fthermalis,(Zleptacanthus,Zviridiventer)),((Cartus,Cmacrodon),(((Onigrofasciatus,Onovemfasciatus),(Ocookii,Odoederleini)),(Onotatus,(Cquinquelineatus,(Ocompressus,(Ocyanosoma,Oangustatus)))))))))))#1)));
+# perl codeml.pl --input temp/$temp --model branch-site --dir . --output_suf Nocturnal --tree spe_nocAces.tre --icode 0 --omega 1.2
+vi codeml_parallel_PSGs.pl
+```
+
+```codeml_parallel_PSGs.pl
+use strict;
+use warnings;
+use Parallel::ForkManager;
+
+# prepare_input_paml.pl
+my $fm=$ARGV[0];
+system("mkdir temp");
+
+my @cmds;
+open FM, $fm or die "can not open $fm\n";
+while (<FM>) {
+        chomp; my @a=split;
+        my $temp=$a[0].".txt";
+        open TEMP, ">temp/$temp" or die "can not create >temp/$temp\n";
+        print TEMP "$_\n";
+        my $cmd="perl codeml.pl --input temp/$temp --model branch-site --dir . --output_suf Nocturnal --tree spe_nocAces.tre --icode 0 --omega 1.2";
+        push @cmds, $cmd;
+}
+
+my $manager = new Parallel::ForkManager(100);
+foreach my $cmd (@cmds) {
+        $manager->start and next;
+        system($cmd);
+        $manager->finish;
+}
+$manager -> wait_all_children;
+system("rm -rf temp/");
+```
+
+```bash
+# (base) jlkang@hnu2024 Wed Apr 09 13:54:57 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
+nohup perl codeml_parallel_PSGs.pl final_orth_input_paml.txt >codeml.process 2>&1 &
+# [1] 154795
 ```
