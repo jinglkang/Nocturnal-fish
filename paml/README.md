@@ -350,13 +350,14 @@ fasta2phy.pl conca_sigpep.fa # generate phylip format: conca_sigpep.fa.phy
 # (base) jlkang@hnu2024 Mon Mar 17 23:40:36 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/sub_orth/paml_input
 nohup raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 1000 -s conca_sigpep.fa.phy -n conca_sigpep -T 192 >tree.reports 2>&1 &
 # [1] 297493
-# use Zebrafish as root, construct a new phylogeny 
-nohup raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 1000 -s conca_sigpep.fa.phy -o Zebrafish -n conca_sigpep_zebrafish_root -T 192 >tree.reports 2>&1 &
-# [1] 186740
 ```
 
 ## Too few orhthologous genes, only select the longest transcripts as the represented genes for each species
 ```bash
+# use Zebrafish as root, construct a new phylogeny
+# (base) jlkang@hnu2024 Fri Apr 11 12:53:16 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input 
+nohup raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 1000 -s conca_sigpep.fa.phy -o Zebrafish -n conca_sigpep_zebrafish_root -T 192 >tree.reports 2>&1 &
+# [1] 186740
 # (base) jlkang@hnu2024 Tue Mar 18 15:55:08 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups
 perl temp1.pl > orthologous_list_rep.txt
 ```
