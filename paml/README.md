@@ -354,10 +354,11 @@ nohup raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 1000 -s conca_sigpep.f
 
 ## Too few orhthologous genes, only select the longest transcripts as the represented genes for each species
 ```bash
-# use all diurnal fishes as outgroup
-# (base) jlkang@hnu2024 Fri Apr 11 21:47:37 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
-nohup raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 1000 -s conca_sigpep.fa.phy -o Zebrafish,Stickleback,Fugu,Platyfish,Medaka,Padel,Pmol,Apoly,Acura,Daru -n conca_sigpep_diurnal_outgroup -T 192 >tree.reports 2>&1 &
-# [1] 198162
+# replace the abbreviation name of species to the full name
+# (base) jlkang@hnu2024 Fri Apr 11 23:48:41 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
+perl temp2.pl conca_sigpep.fa.phy > conca_sigpep.fa.phy.1;mv conca_sigpep.fa.phy.1 conca_sigpep.fa.phy
+nohup raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 1000 -s conca_sigpep.fa.phy -o Danio_rerio,Gasterosteus_aculeatus,Takifugu_rubripes,Xiphophorus_maculatus,Oryzias_latipes,Pomacentrus_adelus,Pomacentrus_moluccensis,Acanthochromis_polyacanthus,Amblyglyphidodon_curacao,Dascyllus_aruanus -n conca_sigpep_diurnal_outgroup -T 192 >tree.reports 2>&1 &
+# [1] 199067
 # use Zebrafish as outgroup, construct a new phylogeny
 # (base) jlkang@hnu2024 Fri Apr 11 12:53:16 /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input 
 nohup raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 1000 -s conca_sigpep.fa.phy -o Zebrafish -n conca_sigpep_zebrafish_root -T 192 >tree.reports 2>&1 &
