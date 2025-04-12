@@ -594,7 +594,7 @@ while (<COVE>) {
         my @a=split /\t/;
         my $zeb=$id{$a[0]};
         my $an =$anno{$zeb};
-        print "$a[0]\t$an\t$a[1]\t$a[2]\n";
+        print "$a[0]\t$an\t$a[1]\t$a[2]\t#a[3]\n";
 }
 ```
 
