@@ -361,3 +361,85 @@ raxmlHPC -f a -m PROTGAMMAAUTO -p 12345 -x 12345 -# 100 -s OPSR_target_spe.phy -
 nohup sh opsin_phy.sh > tree.reports 2>&1 &
 # [1] 38653
 ```
+## Convergence detection in opsins
+```bash
+###### OPSB: 32 species, 349 peps
+# (base) kang1234@celia-PowerEdge-T640 Wed Apr 09 15:23:52 ~/nocturnal_fish/Opsins/OPSB
+vi spe_opsb.tre
+(Stickleback,((Fugu,(Platyfish,Medaka)),(Acrassiceps,(Fvariegata,(((Amelas,Abrevicaudatus),((Nviria,Nsavayensis),(Nfusca,Pmirifica))),((Snematoptera,(Pfraenatus,Pexostigma)),((Rgracilis,(Tfucata,Tzosterophora)),((Fthermalis,(Zleptacanthus,Zviridiventer)),((Cmacrodon,Cartus),(((Odoederleini,Ocookii),(Onigrofasciatus,Onovemfasciatus)),(Onotatus,((Cquinquelineatus,Oangustatus),(Ocyanosoma,Ocompressus)))))))))))));
+vi spe_opsb_psg.tre
+# (Stickleback,((Fugu,(Platyfish,Medaka)),(Acrassiceps,(Fvariegata,(((Amelas,Abrevicaudatus),((Nviria,Nsavayensis),(Nfusca,Pmirifica))),((Snematoptera,(Pfraenatus,Pexostigma)),((Rgracilis,(Tfucata,Tzosterophora)),((Fthermalis,(Zleptacanthus,Zviridiventer)),((Cmacrodon,Cartus),(((Odoederleini,Ocookii),(Onigrofasciatus,Onovemfasciatus)),(Onotatus,((Cquinquelineatus,Oangustatus),(Ocyanosoma,Ocompressus)))))))))))#1));
+
+# kangjingliang@KangdeMacBook-Pro-2 三  4 09 16:16:56 ~/Desktop
+scp kang1234@10.64.139.91:~/nocturnal_fish/Opsins.tar.gz ./
+# (base) jlkang@hnu2024 Wed Apr 09 16:29:07 /data2/jlkang/Nocturnal_fish
+tar -zxvf Opsins.tar.gz
+# (base) jlkang@hnu2024 Wed Apr 09 16:39:17 /data2/jlkang/Nocturnal_fish/Opsins/OPSB
+perl Detect_Nons_opsb.pl > opsb_convergence.txt # only have one convergent site
+# OPSB	4	7:Stickleback(P);Fugu(H);Platyfish(E);Medaka(L);Acrassiceps(M);Fvariegata(T);Amelas(T);Abrevicaudatus(A);Nviria(T);Nsavayensis(T);Nfusca(T);Pmirifica(T);Snematoptera(T);Pfraenatus(M);Pexostigma(M);Rgracilis(V);Tfucata(T);Tzosterophora(T);Fthermalis(T);Zleptacanthus(M);Zviridiventer(M);Cmacrodon(M);Cartus(T);Odoederleini(T);Ocookii(M);Onigrofasciatus(T);Onovemfasciatus(T);Onotatus(T);Cquinquelineatus(T);Oangustatus(T);Ocyanosoma(T);Ocompressus(T);
+
+###### OPSD: 27 species, 350 peps
+# (base) jlkang@hnu2024 Wed Apr 09 16:52:35 /data2/jlkang/Nocturnal_fish/Opsins/OPSD
+vi spe_opsd.tre
+# (Medaka,(Platyfish,((Daru,(Padel,Pmol)),(Tfucata,(Rgracilis,(((Pmirifica,(Pfraenatus,Pexostigma)),((Fvariegata,Acrassiceps),((Amelas,Abrevicaudatus),(Nfusca,(Nsavayensis,Nviria))))),((Cmacrodon,Cartus),(((Onigrofasciatus,Onovemfasciatus),(Ocookii,Odoederleini)),(Onotatus,(Ocompressus,(Oangustatus,Ocyanosoma)))))))))));
+vi spe_opsb_psg.tre
+# (Medaka,(Platyfish,((Daru,(Padel,Pmol)),(Tfucata,(Rgracilis,(((Pmirifica,(Pfraenatus,Pexostigma)),((Fvariegata,Acrassiceps),((Amelas,Abrevicaudatus),(Nfusca,(Nsavayensis,Nviria))))),((Cmacrodon,Cartus),(((Onigrofasciatus,Onovemfasciatus),(Ocookii,Odoederleini)),(Onotatus,(Ocompressus,(Oangustatus,Ocyanosoma))))))))#1)));   
+# (base) jlkang@hnu2024 Wed Apr 09 17:00:29 /data2/jlkang/Nocturnal_fish/Opsins/OPSD
+less spe_opsd.tre | perl -alne 's/\(//g;s/\)//g;s/\,/ /g;s/\;//;print'
+perl Detect_Nons_opsd.pl > opsd_convergence.txt # 53 sites
+
+
+###### OPSG: 30 species, 312 peps
+# (base) jlkang@hnu2024 Wed Apr 09 17:28:12 /data2/jlkang/Nocturnal_fish/Opsins/OPSG
+vi spe_opsg.tre
+# (Zebrafish,(Stickleback,((Fugu,((Platyfish,Medaka),(Daru,(Apoly,(Padel,Acura))))),(Tzosterophora,((Ocompressus,(Ocyanosoma,Oangustatus)),((Onotatus,Odoederleini),((Onovemfasciatus,Onigrofasciatus),(Cartus,((Rgracilis,(Fthermalis,(Zviridiventer,Zleptacanthus))),((Snematoptera,(Pexostigma,Pfraenatus)),((Fvariegata,Acrassiceps),(Nfusca,(Nsavayensis,Nviria)))))))))))));
+vi spe_opsg_psg.tre
+less spe_opsg.tre | perl -alne 's/\(//g;s/\)//g;s/\,/ /g;s/\;//;print'
+perl Detect_Nons_opsg.pl # no site
+
+
+###### OPSR: 24 species, 312 peps
+# (base) jlkang@hnu2024 Wed Apr 09 19:23:06 /data2/jlkang/Nocturnal_fish/Opsins/OPSR
+vi spe_opsr.tre
+# (Zebrafish,(Stickleback,((Apoly,(Fugu,(Medaka,Platyfish))),(Cquinquelineatus,((Oangustatus,Ocyanosoma),(Snematoptera,(Fthermalis,((Cmacrodon,Cartus),(((Ocookii,Odoederleini),(Onigrofasciatus,Onovemfasciatus)),(Fvariegata,((Amelas,Abrevicaudatus),((Pmirifica,Nfusca),(Nsavayensis,Nviria)))))))))))));
+vi spe_opsr_psg.tre
+# (Zebrafish,(Stickleback,((Apoly,(Fugu,(Medaka,Platyfish))),(Cquinquelineatus,((Oangustatus,Ocyanosoma),(Snematoptera,(Fthermalis,((Cmacrodon,Cartus),(((Ocookii,Odoederleini),(Onigrofasciatus,Onovemfasciatus)),(Fvariegata,((Amelas,Abrevicaudatus),((Pmirifica,Nfusca),(Nsavayensis,Nviria))))))))))#1)));
+less spe_opsr.tre | perl -alne 's/\(//g;s/\)//g;s/\,/ /g;s/\;//;print'
+perl Detect_Nons_opsr.pl > opsr_convergence.txt # 6 sites
+```
+
+## Positive selection detection in opsins
+```bash
+# perl codeml.pl --input temp/$temp --model branch-site --dir . --output_suf Nocturnal --tree spe_nocAces.tre --icode 0 --omega 1.2
+# (base) jlkang@hnu2024 Wed Apr 09 19:51:52 /data2/jlkang/Nocturnal_fish/Opsins/
+cp /data2/jlkang/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input/codeml.pl ./
+# (base) jlkang@hnu2024 Wed Apr 09 19:58:14 /data2/jlkang/Nocturnal_fish/Opsins
+vi OPSB.txt
+# OPSB
+# (base) jlkang@hnu2024 Wed Apr 09 20:19:52 /data2/jlkang/Nocturnal_fish/Opsins/OPSB
+less final_alignment.phy|perl -alne 's/\_\d+//g;s/\_E\w+\d+//g;print' > final_alignment.phy.1; mv final_alignment.phy.1 final_alignment.phy
+# (base) jlkang@hnu2024 Wed Apr 09 20:20:32 /data2/jlkang/Nocturnal_fish/Opsins
+nohup perl codeml.pl --input OPSB.txt --model branch-site --dir . --output_suf Nocturnal --tree spe_opsb_psg.tre --icode 0 --omega 1.2 > OPSB_psg.txt 2>&1 &
+# [2] 164986
+
+# OPSD
+# (base) jlkang@hnu2024 Wed Apr 09 20:53:16 /data2/jlkang/Nocturnal_fish/Opsins/OPSD
+less final_alignment.phy|perl -alne 's/\_\d+//g;s/\_E\w+\d+//g;print' > final_alignment.phy.1; mv final_alignment.phy.1 final_alignment.phy
+# (base) jlkang@hnu2024 Wed Apr 09 20:59:37 /data2/jlkang/Nocturnal_fish/Opsins
+nohup perl codeml.pl --input OPSD.txt --model branch-site --dir . --output_suf Nocturnal --tree spe_opsd_psg.tre --icode 0 --omega 1.2 > OPSD_psg.txt 2>&1 &
+# [3] 165000
+
+# OPSG
+# (base) jlkang@hnu2024 Wed Apr 09 20:54:14 /data2/jlkang/Nocturnal_fish/Opsins/OPSG
+less final_alignment.phy|perl -alne 's/\_\d+//g;s/\_E\w+\d+//g;print' > final_alignment.phy.1; mv final_alignment.phy.1 final_alignment.phy
+# (base) jlkang@hnu2024 Wed Apr 09 21:00:23 /data2/jlkang/Nocturnal_fish/Opsins
+nohup perl codeml.pl --input OPSG.txt --model branch-site --dir . --output_suf Nocturnal --tree spe_opsg_psg.tre --icode 0 --omega 1.2 > OPSG_psg.txt 2>&1 &
+# [4] 165082
+
+# OPSR
+# (base) jlkang@hnu2024 Wed Apr 09 20:54:46 /data2/jlkang/Nocturnal_fish/Opsins/OPSR
+less final_alignment.phy|perl -alne 's/\_\d+//g;s/\_E\w+\d+//g;print' > final_alignment.phy.1; mv final_alignment.phy.1 final_alignment.phy
+# (base) jlkang@hnu2024 Wed Apr 09 21:02:30 /data2/jlkang/Nocturnal_fish/Opsins
+nohup perl codeml.pl --input OPSR.txt --model branch-site --dir . --output_suf Nocturnal --tree spe_opsr_psg.tre --icode 0 --omega 1.2 > OPSR_psg.txt 2>&1 &
+# [5] 165101
+```
