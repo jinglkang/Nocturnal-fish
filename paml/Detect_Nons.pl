@@ -54,7 +54,7 @@ sub Build_pos_hash {
         }
 
         for (my $i = 0; $i < $len; $i++) {
-                my %hash2;
+                my (%hash2,%hash3);
                 my $pos=$i;
                 my $newp=$pos+1;
                 my $info=$newp.":";
@@ -71,12 +71,14 @@ sub Build_pos_hash {
                 }
                 foreach my $spe (@nocls) {
                         my $spepos=$hash1{$spe}->{$pos};
+                        $hash3{$spepos}++;
                         push @nocls_pos, $spepos;
                 }
                 my @isect = intersect(@cleas_pos, @nocls_pos);
-                my $numb=keys %hash2;
+                my $numb2=keys %hash2;
+                my $numb3=keys %hash3;
                 unless (@isect) {
-                        print "$orth\t$numb\t$info\n";
+                        print "$orth\t$numb2\t$numb3\t$info\n" if $numb2==1 || $numb3==1;
                 }
         }
 }
