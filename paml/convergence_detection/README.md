@@ -44,3 +44,14 @@ ls -lt # list the files according the date (the lastest to earliest)
 # the out put is: ancestral.txt; mc.txt; siterates.txt
 # And then estimate the ratio of convergence and non-convergence in the selected site in the 1000 replicates
 ```
+### Detect the positive selection signals in nocturnal fishes
+```bash
+# jlkang@hnu2024 Fri Nov 14 2025 11:10:08 ~/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
+vi spe_hyphy.tre
+# (((((Snematoptera{Foreground},(Pexostigma{Foreground},Pfraenatus{Foreground})),(((Tfucata{Foreground},(Tzosterophora{Foreground},((Zebrafish,Stickleback),(Fugu,((Platyfish,Medaka),(((Padel,Pmol),(Apoly,Acura)),Daru)))))),Rgracilis{Foreground}),(((Zviridiventer{Foreground},Zleptacanthus{Foreground}),Fthermalis{Foreground}),((((Odoederleini{Foreground},Ocookii{Foreground}),(Onovemfasciatus{Foreground},Onigrofasciatus{Foreground})),(Onotatus{Foreground},((Ocompressus{Foreground},(Oangustatus{Foreground},Ocyanosoma{Foreground})),Cquinquelineatus{Foreground}))),(Cmacrodon{Foreground},Cartus{Foreground}))))),(Acrassiceps{Foreground},Fvariegata{Foreground})),((Nfusca{Foreground},Pmirifica{Foreground}),(Nviria{Foreground},Nsavayensis{Foreground}))),Amelas{Foreground},Abrevicaudatus{Foreground});
+# run hyphy with BUSTED-MH method
+# final_orth_input_paml.txt
+conda activate hyphy_env
+nohup perl run_hyphy.pl final_orth_input_paml.txt spe_hyphy.tre Nocturnal > run_hyphy.process 2>&1 &
+# [1] 90730
+```
