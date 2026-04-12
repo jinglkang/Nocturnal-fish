@@ -114,7 +114,7 @@ while (<INPUT>) {
         system("pal2nal.pl pep.aln nuc.fasta -output fasta >pal2nal.fasta"); # pal2nal: pal2nal.fasta
         system("Gblocks pal2nal.fasta -b4=10 -b5=n -b3=5 -t=c"); # Gblocks: pal2nal.fasta-gb
 
-    open FIL2, "pal2nal.fasta-gb" or die "can not open pal2nal.fasta-gb\n";
+    open FIL2, "pal2nal.fasta-gb.fa" or die "can not open pal2nal.fasta-gb.fa\n";
     open FIL3, ">final_alignment.phy" or die "can not create final_alignment.phy\n";
     open FIL4, ">final_alignment.fa" or die "can not create final_alignment.fa\n";
     my $SPE; my (%hash1, %hash2);
