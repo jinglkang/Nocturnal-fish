@@ -1058,6 +1058,8 @@ mkdir Core_clock_genes;cd Core_clock_genes
 
 # 只筛选pattern1的caas
 perl Search_pattern1.pl > Total_ccas_pattern1.txt
+# 从数信服务器把结果传至本地
+scp -P 20231 h2076@sxycloud1.top:~/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input/CAAS/Total_ccas_pattern1.txt ./
 ```
 
 
