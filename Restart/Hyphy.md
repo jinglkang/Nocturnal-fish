@@ -1048,3 +1048,34 @@ cat Hyphy_PSGs/Hyphy_PSGs_genes.txt csubst/csubst_ccs_genes_id.txt Hyphy_relax/I
 # kangjingliang@KangdeMacBook-Pro-2 二  9 23 2025 16:53:48 ~/Documents/2025/Nocturnal_fish
 mkdir Core_clock_genes;cd Core_clock_genes
 ```
+
+## Convergent site detection
+```bash
+# # ct discovery -a final_alignment_pep.fa -t ../config.tab -o discovery.output --fmt fasta
+# h2076@h2076 Thu Sep 17 2026 11:14:45 ~/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
+# perl Run_caas.pl final_orth_input_paml.txt > run_caas.process 2>&1 &
+# [1] 209207
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
