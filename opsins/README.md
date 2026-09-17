@@ -443,3 +443,17 @@ less final_alignment.phy|perl -alne 's/\_\d+//g;s/\_E\w+\d+//g;print' > final_al
 nohup perl codeml.pl --input OPSR.txt --model branch-site --dir . --output_suf Nocturnal --tree spe_opsr_psg.tre --icode 0 --omega 1.2 > OPSR_psg.txt 2>&1 &
 # [5] 165101
 ```
+
+## 检测opsins是否存在正选择和选择增强
+```bash
+# Hyphy: 将所有夜行鱼均设定为前景枝
+# 把比对序列中的header纠正一下
+# 正选择
+# h2076@h2076 Thu Sep 17 2026 15:57:59 ~/Nocturnal_fish/Opsins/OPSB
+less final_alignment.fa|perl -alne 'if (/>/){s/_.*//;print}else{print}' > final_alignment_spename.fa
+hyphy busted --alignment final_alignment_spename.fa --tree spe_opsb_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --branches Foreground > hyphy_busted_results.txt
+# Relax
+hyphy relax --alignment final_alignment_spename.fa --tree spe_opsb_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --test Foreground > hyphy_relax_results.txt
+# caas
+ct discovery -a final_alignment_spename.fa -t config.tab -o discovery.output --fmt fasta
+```
