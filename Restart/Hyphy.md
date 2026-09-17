@@ -1056,10 +1056,14 @@ mkdir Core_clock_genes;cd Core_clock_genes
 # perl Run_caas.pl final_orth_input_paml.txt > run_caas.process 2>&1 &
 # [1] 397584
 
+# h2076@h2076 Thu Sep 17 2026 15:14:58 ~/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input/CAAS
 # 只筛选pattern1的caas
 perl Search_pattern1.pl > Total_ccas_pattern1.txt
 # 从数信服务器把结果传至本地
 scp -P 20231 h2076@sxycloud1.top:~/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input/CAAS/Total_ccas_pattern1.txt ./
+# 获取注释信息
+cp Total_ccas_pattern1.txt ../../
+perl anno_orth.pl > Total_ccas_pattern1_anno.txt
 ```
 
 
