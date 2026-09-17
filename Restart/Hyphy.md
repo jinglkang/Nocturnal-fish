@@ -1055,6 +1055,9 @@ mkdir Core_clock_genes;cd Core_clock_genes
 # h2076@h2076 Thu Sep 17 2026 11:14:45 ~/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/paml_input
 # perl Run_caas.pl final_orth_input_paml.txt > run_caas.process 2>&1 &
 # [1] 397584
+
+# 只筛选pattern1的caas
+perl Search_pattern1.pl > Total_ccas_pattern1.txt
 ```
 
 
