@@ -4,7 +4,6 @@ use warnings;
 use Getopt::Long;
 use Parallel::ForkManager;
 
-# hyphy /lustre1/g/sbs_schunter/Kang/Ldim_revision/BUSTED-MH.bf --alignment final_alignment.fa --tree /lustre1/g/sbs_schunter/Kang/Ldim_revision/spe_hyphy.tre --branches Foreground
 my $list=$ARGV[0]; # The list
 my $outd="CAAS";
 unless (-d $outd) {
@@ -21,7 +20,7 @@ while (<LIST>) {
     my $orth=$a[0];
     my $alig="$orth/final_alignment_pep.fa"; # the alignment
     my $outl="$outd/$orth"."_caas.txt";
-    my $cmd ="ct discovery -a final_alignment_pep.fa -t ../config.tab -o $outl --fmt fasta";
+    my $cmd ="ct discovery -a $alig -t config.tab -o $outl --fmt fasta";
 #   print "$cmd\n";
     push @cmds, $cmd;
 }
