@@ -455,7 +455,7 @@ hyphy busted --alignment final_alignment_spename.fa --tree spe_opsb_hyphy.tre --
 # Relax
 hyphy relax --alignment final_alignment_spename.fa --tree spe_opsb_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --test Foreground > hyphy_relax_results.txt
 # caas
-less final_alignment_spename.fa|grep '>'|perl -alne 's/>//;print' # 前景枝标记为1，背景枝标记为0
+less final_alignment_spename.fa|grep '>'|perl -alne 's/>//;print' # config.tab: 前景枝标记为1，背景枝标记为0
 ct discovery -a final_alignment_spename.fa -t config.tab -o discovery.output --fmt fasta
 
 # do the same in OPSD/ OPSG/ OPSR/
