@@ -449,14 +449,33 @@ nohup perl codeml.pl --input OPSR.txt --model branch-site --dir . --output_suf N
 # Hyphy: 将所有夜行鱼均设定为前景枝
 # 把比对序列中的header纠正一下
 # 正选择
+# OPSB
 # h2076@h2076 Thu Sep 17 2026 15:57:59 ~/Nocturnal_fish/Opsins/OPSB
 less final_alignment.fa|perl -alne 'if (/>/){s/_.*//;print}else{print}' > final_alignment_spename.fa
-hyphy busted --alignment final_alignment_spename.fa --tree spe_opsb_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --branches Foreground > hyphy_busted_results.txt
+nohup hyphy busted --alignment final_alignment_spename.fa --tree spe_opsb_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --branches Foreground > hyphy_busted_results.txt 2>&1 &
 # Relax
-hyphy relax --alignment final_alignment_spename.fa --tree spe_opsb_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --test Foreground > hyphy_relax_results.txt
+nohup hyphy relax --alignment final_alignment_spename.fa --tree spe_opsb_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --test Foreground > hyphy_relax_results.txt 2>&1 &
 # caas
 less final_alignment_spename.fa|grep '>'|perl -alne 's/>//;print' # config.tab: 前景枝标记为1，背景枝标记为0
 ct discovery -a final_alignment_spename.fa -t config.tab -o discovery.output --fmt fasta
 
 # do the same in OPSD/ OPSG/ OPSR/
+# OPSD
+# h2076@h2076 Thu Sep 17 2026 17:24:42 ~/Nocturnal_fish/Opsins/OPSD
+nohup hyphy busted --alignment final_alignment_spename.fa --tree spe_opsd_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --branches Foreground > hyphy_busted_results.txt 2>&1 &
+nohup hyphy relax --alignment final_alignment_spename.fa --tree spe_opsd_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --test Foreground > hyphy_relax_results.txt 2>&1 &
+ct discovery -a final_alignment_spename.fa -t config.tab -o discovery.output --fmt fasta
+
+# OPSG
+# h2076@h2076 Thu Sep 17 2026 17:26:30 ~/Nocturnal_fish/Opsins/OPSG
+nohup hyphy busted --alignment final_alignment_spename.fa --tree spe_opsg_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --branches Foreground > hyphy_busted_results.txt 2>&1 &
+nohup hyphy relax --alignment final_alignment_spename.fa --tree spe_opsg_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --test Foreground > hyphy_relax_results.txt 2>&1 &
+ct discovery -a final_alignment_spename.fa -t config.tab -o discovery.output --fmt fasta
+
+# OPSR
+# h2076@h2076 Thu Sep 17 2026 17:28:21 ~/Nocturnal_fish/Opsins/OPSR
+nohup hyphy busted --alignment final_alignment_spename.fa --tree spe_opsr_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --branches Foreground > hyphy_busted_results.txt 2>&1 &
+nohup hyphy relax --alignment final_alignment_spename.fa --tree spe_opsr_hyphy.tre --multiple-hits Double+Triple --starting-points 5 --test Foreground > hyphy_relax_results.txt 2>&1 &
+ct discovery -a final_alignment_spename.fa -t config.tab -o discovery.output --fmt fasta
+
 ```
