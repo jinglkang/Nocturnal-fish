@@ -30,6 +30,18 @@ vi hyphy.tre
 nohup hyphy busted --alignment final_alignment.fa --tree hyphy.tre --multiple-hits Double+Triple --starting-points 5 --branches Foreground > hyphy_busted_results.txt 2>&1 &
 nohup hyphy relax --alignment final_alignment.fa --tree hyphy.tre --multiple-hits Double+Triple --starting-points 5 --test Foreground > hyphy_relax_results.txt 2>&1 &
 
+# Relax: OG0005661 (NFIL3), OG0012368 (NFIL3)
+
+# 趋同位点
+# 先翻译成蛋白序列
+# h2076@h2076 Sat Sep 19 2026 15:11:21 ~/Nocturnal_fish/Orthologous/pep/OrthoFinder/Results_Jan15/Orthogroups/Target_genes/OG0005031
+translateDna.pl -i final_alignment.fa > final_alignment_pep.fa
+less final_alignment_pep.fa|grep '>'|perl -alne 's/\>//;print'
+vi config.tab
+ct discovery -a final_alignment_pep.fa -t config.tab -o discovery.output --fmt fasta
+
+# 整合成一个脚本
+perl temp2.pl # 未发现这些基因存在patter1的convergence
 ```
 
 ```Create_newtree.R
@@ -74,5 +86,61 @@ while (<ORTH>) {
     chdir "$pwd";
     my $pwd2=getcwd();
     #print "$pwd2\n";
+}
+```
+
+```temp2.pl
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Cwd qw(getcwd);
+
+my %dius=&build_dius();
+my $pwd=getcwd();
+#print "$pwd\n";
+my $orth="final_orth_input_paml.txt";
+open ORTH, $orth or die "can not open $orth\n";
+while (<ORTH>) {
+    chomp;
+    my $orthid=$_;
+    chdir($orthid);
+    my $pwd1=getcwd();
+    #print "$pwd1\n";
+    my $cmd1="translateDna.pl -i final_alignment.fa > final_alignment_pep.fa";
+    system "$cmd1";
+    my $fast="final_alignment.fa";
+    open FAST, $fast or die "can not open $fast\n";
+    my $keep="config.tab";
+    open KEEP, ">$keep" or die "can not create $keep\n";
+    while (<FAST>) {
+        chomp;
+        if (/\>/) {
+            s/\>//;
+            my $tag;
+            ($dius{$_})?($tag=0):($tag=1);
+            print KEEP "$_\t$tag\n";
+        }
+    }
+    my $cmd2="ct discovery -a final_alignment_pep.fa -t config.tab -o discovery.output --fmt fasta";
+    system($cmd2);
+    chdir "$pwd";
+    my $pwd2=getcwd();
+    #print "$pwd2\n";
+}
+
+sub build_dius {
+    my %hash=(
+        'Acura'=> 1,
+        'Apoly'=> 1,
+        'Daru'=> 1,
+        'Pmol'=> 1,
+        'Padel'=> 1,
+        'Platyfish'=> 1,
+        'Fugu'=> 1,
+        'Medaka'=> 1,
+        'Stickleback'=> 1,
+        'Zebrafish'=> 1,
+    );
+    return(%hash);
 }
 ```
