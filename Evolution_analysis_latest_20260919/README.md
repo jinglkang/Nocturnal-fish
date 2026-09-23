@@ -42,6 +42,58 @@ ct discovery -a final_alignment_pep.fa -t config.tab -o discovery.output --fmt f
 
 # 整合成一个脚本
 perl temp2.pl # 未发现这些基因存在patter1的convergence
+
+# 富集分析
+# 首先将Uniprot ID转换成Entrez gene symbols
+# 背景：所有可被注释的paml input genes
+# (base) kangjingliang@KangdeMacBook-Pro-2 一  9 21 2026 12:00:44 ~/Documents/2025/Nocturnal_fish
+less final_orth_input_paml_anno.txt|perl -alne 'my @a=split /\|/, $F[2];print "$a[1]"' > final_orth_input_paml_anno_UniID.txt
+# 将final_orth_input_paml_anno_UniID.txt上传至https://www.uniprot.org/id-mapping进行ID转换
+# UniProtKB AC/ID ==> Gene_Name；结果文件：final_UniID_convertion.xlsx
+
+# PSGs
+# (base) kangjingliang@KangdeMacBook-Pro-2 一  9 21 2026 12:19:46 ~/Documents/2025/Nocturnal_fish/Hyphy_PSGs
+less Hyphy_PSGs_anno.txt|perl -alne 'my @a=split /\|/, $F[1];print "$a[1]"' > Hyphy_PSGs_anno_UniID.txt
+
+# Relax
+less Hyphy_relax_genes_fdr_sig_anno.txt|perl -alne 'my @a=split /\|/, $F[1];print "$a[1]"' > Hyphy_relax_anno_UniID.txt
+
+# caas
+# (base) kangjingliang@KangdeMacBook-Pro-2 二  9 22 2026 11:10:18 ~/Documents/2025/Nocturnal_fish/caas
+less Total_ccas_pattern1_anno.txt|perl -alne 'next if /UniprotID/ || /^\s+/;my @a=split /\|/, $F[0];print "$a[1]"'|sort -u > Hyphy_caas_anno_UniID.txt
+```
+
+# Compare dN/dS between cardinalfish and diurnal fish species
+## 基于之前paml的free-ratio的结果
+```bash
+# 保证计算的orth里面要至少包括6种日行鱼和10种天竺鲷
+# 每个orth的dNdS结果为一个文件，并标注好物种是天竺鲷还是日行鱼
+# (base) kangjingliang@KangdeMBP-2 三  9 23 2026 11:52:28 ~/Documents/2025/Nocturnal_fish/paml_FreeRatio
+perl Filter_dNdS.pl # 产生574个*_FreeRatio.txt
+# 通过R对日行鱼和天竺鲷的dNdS进行wilcox.test比较
+perl Wilcox_test.pl # 产生574个*_wilcox_result.txt
+# 整合所有*_wilcox_result.txt的Pvalue结果: 计算每个orth中日行鱼和天竺鲷的dNdS均值，并比较其大小
+perl Extract_pvalue.pl > dNdS_pvalue.txt
+# 进行FDR检验
+Get_FDR.R # 得到wilcox_results_FDR.txt
+# 添加注释信息
+# wilcox_results_FDR_anno.txt
+```
+
+```Get_FDR.R
+setwd("~/Documents/2025/Nocturnal_fish/paml_FreeRatio")
+dNdS<-read.table("dNdS_pvalue.txt", header = T)
+dNdS$FDR<-p.adjust(
+  dNdS$Pvalue,
+  method = "BH"
+)
+
+write.table(dNdS,
+            "wilcox_results_FDR.txt",
+            sep = "\t",
+            quote = FALSE,
+            row.names = FALSE)
+summary(dNdS$Pvalue)
 ```
 
 ```Create_newtree.R
